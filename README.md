@@ -278,6 +278,38 @@ npm run dev   # http://localhost:3000
 
 </details>
 
+## 🧠 The Agent Pattern — Extend This
+
+Everything this demo does reduces to one mechanism: a routing agent (`director_agent`) answers directly from a tool call, or delegates to a specialist sub-agent (`compliance_agent`), and both are grounded in parameterized ClickHouse queries whose exact SQL is returned alongside the answer (`agents/tools.py`, `frontend/api/chat.py`). Nothing about that loop is animation-specific. Three ways to point it at something else:
+
+- **Swap the schema, keep the loop.** `production_events` (`item_id, item_type, stage, status, ts, notes`) and `casting_and_assets` (`item_id, character_or_track, attribute_key, attribute_value`) are generic stage/status + structured-attribute tables. Repoint them at render-farm jobs, vendor deliverables, or rights-clearance records and `tool_query_status` / `get_attributes` need zero changes.
+- **Swap the compliance functions, keep the agent split.** `agents/compliance.py`'s `check_diversity`, `check_music_policy`, and `check_pacing` are pure functions over already-fetched rows — no ClickHouse import. Write a new pure function against the same `list[dict]` shape (e.g. `check_delivery_spec(attributes)`) and wire it into `compliance_agent`'s tool list; the Director → Compliance delegation and the SQL-grounding response format carry over untouched.
+- **Swap single-item lookups for a slate-wide sweep.** `list_latest_items` already does a `GROUP BY item_id` / `argMax(x, ts)` pass across every row for the dashboard — extend that pattern into the compliance path so a question like "which shots fail pacing" runs one aggregate query instead of one lookup per item.
+
+Example prompts to hand Claude or Cursor, once you've swapped in your own schema:
+
+```
+Using agents/tools.py as the template, add a tool_query_render_status(item_id) function that
+reads from a `render_jobs` table (job_id, shot_id, frame_range, status, ts) instead of
+production_events - keep the same parameterized {name:Type} binding, the same @with_retry
+decorator, and the same tenant_id filtering pattern.
+```
+
+```
+Following the shape of agents/compliance.py's check_pacing, write a pure function
+check_delivery_spec(attributes: list[dict]) -> dict that fails when any row with
+attribute_key="frame_rate" doesn't equal the studio's required value - no ClickHouse import,
+same {"passed": bool, ...} return shape, and add a pytest fixture-based test like
+tests/test_compliance.py.
+```
+
+```
+Extend agents/tools.list_latest_items's GROUP BY / argMax(x, ts) pattern into a new
+list_failing_compliance(tenant_id) function that runs check_diversity/check_music_policy/
+check_pacing across every item_id in one pass instead of one tool_check_* call per item,
+and returns just the failing ones with their specific gap.
+```
+
 <div align="center">
 
 ![ArkNet Digital](https://capsule-render.vercel.app/api?type=waving&color=0:1D4ED8,55:0B1E3D,100:020617&height=120&section=footer&text=ArkNet%20Digital&fontSize=28&fontColor=ffffff&desc=michael%40arknet.digital&descAlignY=75&descSize=14)
