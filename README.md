@@ -280,6 +280,6 @@ npm run dev   # http://localhost:3000
 
 <div align="center">
 
-![ArkNet Digital](https://capsule-render.vercel.app/api?type=waving&color=0:1D4ED8,55:0B1E3D,100:020617&height=120&section=footer&text=ArkNet%20Digital&fontSize=28&fontColor=ffffff&desc=contact%40example.com&descAlignY=75&descSize=14)
+![ArkNet Digital](https://capsule-render.vercel.app/api?type=waving&color=0:1D4ED8,55:0B1E3D,100:020617&height=120&section=footer&text=ArkNet%20Digital&fontSize=28&fontColor=ffffff&desc=michael%40arknet.digital&descAlignY=75&descSize=14)
 
 </div>
