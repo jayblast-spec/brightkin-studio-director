@@ -1,0 +1,4 @@
+google-adk>=2.7.1
+clickhouse-connect>=0.7.0
+python-dotenv>=1.0.0
+dnspython>=2.6.0

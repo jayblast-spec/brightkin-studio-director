@@ -1,0 +1,493 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * BrightKin Studio Director — cinematic dark design system.
+ * Canvas: near-black. Accent: warm gold/amber (#ffb84d).
+ * All colors in oklch. Never hardcode colors in components.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-cyan: var(--cyan);
+  --color-success: var(--success);
+  --color-hairline: var(--hairline);
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.16 0.008 260);
+  --foreground: oklch(0.97 0.006 90);
+
+  --surface: oklch(0.21 0.01 260);
+  --surface-raised: oklch(0.25 0.012 260);
+
+  --card: oklch(0.21 0.01 260);
+  --card-foreground: oklch(0.97 0.006 90);
+  --popover: oklch(0.21 0.01 260);
+  --popover-foreground: oklch(0.97 0.006 90);
+
+  --gold: oklch(0.82 0.13 76);
+  --gold-soft: oklch(0.9 0.075 82);
+  --cyan: oklch(0.78 0.1 210);
+  --success: oklch(0.79 0.15 155);
+
+  --primary: oklch(0.82 0.13 76);
+  --primary-foreground: oklch(0.18 0.02 70);
+
+  --secondary: oklch(0.25 0.012 260);
+  --secondary-foreground: oklch(0.95 0.006 90);
+
+  --muted: oklch(0.25 0.012 260);
+  --muted-foreground: oklch(0.72 0.014 255);
+
+  --accent: oklch(0.28 0.02 70);
+  --accent-foreground: oklch(0.92 0.09 80);
+
+  --destructive: oklch(0.65 0.19 22);
+  --destructive-foreground: oklch(0.98 0.005 90);
+
+  --hairline: oklch(0.98 0.01 250 / 14%);
+  --border: oklch(0.98 0.01 250 / 12%);
+  --input: oklch(0.98 0.01 250 / 16%);
+  --ring: oklch(0.82 0.13 76 / 60%);
+
+  --gradient-gold: linear-gradient(135deg, oklch(0.9 0.09 84), oklch(0.78 0.14 62));
+  --gradient-panel: linear-gradient(
+    160deg,
+    oklch(0.98 0.01 250 / 7%),
+    oklch(0.98 0.01 250 / 2%) 45%,
+    oklch(0.98 0.01 250 / 5%)
+  );
+  --shadow-depth:
+    0 1px 0 0 oklch(1 0 0 / 6%) inset, 0 30px 60px -24px oklch(0 0 0 / 80%),
+    0 4px 14px -6px oklch(0 0 0 / 60%);
+  --shadow-glow: 0 0 0 1px oklch(0.82 0.13 76 / 22%), 0 24px 70px -28px oklch(0.82 0.13 76 / 45%);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "ss01";
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: oklch(0.82 0.13 76 / 30%);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(1 0 0 / 12%);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+}
+
+/* ---------- Utilities ---------- */
+
+@utility text-gradient-gold {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility glass-panel {
+  background-image: var(--gradient-panel);
+  background-color: oklch(0.2 0.01 260 / 55%);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(18px) saturate(130%);
+  box-shadow: var(--shadow-depth);
+}
+
+@utility hairline {
+  border: 1px solid var(--hairline);
+}
+
+@utility glow-gold {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility input-field {
+  width: 100%;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--hairline);
+  background-color: oklch(0.16 0.008 260 / 60%);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  transition: border-color 0.15s var(--ease-out-soft);
+
+  &::placeholder {
+    color: oklch(0.72 0.014 255 / 70%);
+  }
+  &:focus {
+    outline: none;
+    border-color: oklch(0.82 0.13 76 / 50%);
+  }
+}
+
+/* Scroll reveal */
+@utility reveal {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 0.6s var(--ease-out-soft),
+    transform 0.6s var(--ease-out-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+@utility reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Tilt card */
+@utility tilt-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.35s var(--ease-out-soft);
+  will-change: transform;
+}
+
+@utility tilt-layer {
+  transform: translateZ(38px);
+}
+
+@keyframes bk-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes bk-pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes bk-dash {
+  to {
+    stroke-dashoffset: -220;
+  }
+}
+
+@keyframes bk-caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@utility animate-float {
+  animation: bk-float 7s ease-in-out infinite;
+}
+
+@utility animate-pulse-ring {
+  animation: bk-pulse-ring 2.8s ease-out infinite;
+}
+
+@utility animate-dash {
+  animation: bk-dash 6s linear infinite;
+}
+
+@utility animate-caret {
+  animation: bk-caret 1s steps(1) infinite;
+}
+
+/* ---------- Viewfinder power-on sequence ---------- */
+/* A camera monitor "booting": corner brackets snap into frame, the tally
+   light warms up, the timecode readout fades in last — a real choreographed
+   sequence, not simultaneous fade-in. Runs once on mount. */
+
+@keyframes bk-bracket-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.6) translateZ(20px);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(20px);
+  }
+}
+
+@keyframes bk-tally-warm {
+  0%,
+  20% {
+    opacity: 0.15;
+    filter: saturate(0.3) brightness(0.7);
+  }
+  55% {
+    opacity: 1;
+    filter: saturate(1.4) brightness(1.3);
+  }
+  100% {
+    opacity: 1;
+    filter: saturate(1) brightness(1);
+  }
+}
+
+@keyframes bk-readout-in {
+  0% {
+    opacity: 0;
+    transform: translateY(3px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes bk-scan-sweep {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(220%);
+  }
+}
+
+@utility bracket-in {
+  animation: bk-bracket-in 0.7s var(--ease-out-soft) both;
+}
+
+@utility tally-warm {
+  animation: bk-tally-warm 0.9s ease-out both;
+}
+
+@utility readout-in {
+  animation: bk-readout-in 0.5s var(--ease-out-soft) both;
+}
+
+@utility scan-sweep {
+  animation: bk-scan-sweep 3.2s linear infinite;
+}
+
+/* ---------- Depth / 3D primitives shared by cards, frames, rows ---------- */
+
+@utility depth-tilt {
+  transform-style: preserve-3d;
+  transition:
+    transform 0.4s var(--ease-out-soft),
+    box-shadow 0.4s var(--ease-out-soft);
+  will-change: transform;
+}
+
+@utility depth-tilt-hover {
+  &:hover {
+    transform: perspective(900px) rotateX(3deg) rotateY(-3deg) translateZ(4px);
+    box-shadow: var(--shadow-depth);
+  }
+}
+
+@utility row-3d {
+  transform-style: preserve-3d;
+  transition:
+    transform 0.25s var(--ease-out-soft),
+    background-color 0.25s var(--ease-out-soft);
+  &:hover {
+    transform: translateZ(6px) scale(1.006);
+    background-color: oklch(0.98 0.01 250 / 4%);
+  }
+}
+
+@keyframes bk-row-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 8px, -12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@utility row-in {
+  animation: bk-row-in 0.45s var(--ease-out-soft) both;
+}
+
+/* ---------- Scroll depth for the ambient hero glow (progressive enhancement) ---------- */
+/* Two glow layers drift at different rates as the page scrolls past the hero —
+   real parallax depth, not a fixed backdrop. Browsers without scroll-driven
+   animations simply keep the static hero glow already in place. */
+
+@supports (animation-timeline: scroll()) {
+  .parallax-near {
+    animation: bk-parallax-near linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 90vh;
+  }
+  .parallax-far {
+    animation: bk-parallax-far linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 90vh;
+  }
+}
+
+@keyframes bk-parallax-near {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, -110px, 0);
+  }
+}
+
+@keyframes bk-parallax-far {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -45px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bracket-in,
+  .tally-warm,
+  .readout-in,
+  .scan-sweep,
+  .row-in {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+  .parallax-far {
+    animation: none !important;
+    transform: none !important;
+  }
+  .parallax-near {
+    animation: none !important;
+    transform: translate3d(-50%, 0, 0) !important;
+  }
+  .depth-tilt-hover:hover,
+  .row-3d:hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
