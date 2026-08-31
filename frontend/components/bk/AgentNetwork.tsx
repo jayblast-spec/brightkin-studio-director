@@ -11,7 +11,7 @@ type Node = {
 };
 
 /**
- * Abstract 3D-ish network: two orbiting "agent" cores exchanging packets with a
+ * Abstract 3D-ish network: four orbiting "agent" cores exchanging packets with a
  * lattice of database nodes. Pure canvas, no dependencies.
  */
 export function AgentNetwork({ className }: { className?: string }) {
@@ -56,11 +56,13 @@ export function AgentNetwork({ className }: { className?: string }) {
     }
     nodes.push({ x: -0.16, y: -0.2, z: 0.4, r: 5, kind: "agent" });
     nodes.push({ x: 0.2, y: 0.16, z: -0.3, r: 4, kind: "agent" });
+    nodes.push({ x: -0.2, y: 0.17, z: -0.25, r: 4, kind: "agent" });
+    nodes.push({ x: 0.17, y: -0.17, z: 0.32, r: 4, kind: "agent" });
 
     type Packet = { from: number; to: number; t: number; speed: number };
     const packets: Packet[] = Array.from({ length: 14 }, () => ({
       from: Math.floor(Math.random() * RING),
-      to: RING + (Math.random() > 0.5 ? 1 : 0),
+      to: RING + Math.floor(Math.random() * 4),
       t: Math.random(),
       speed: 0.0022 + Math.random() * 0.0035,
     }));
@@ -138,7 +140,7 @@ export function AgentNetwork({ className }: { className?: string }) {
         if (pk.t > 1) {
           pk.t = 0;
           pk.from = Math.floor(Math.random() * RING);
-          pk.to = RING + (Math.random() > 0.5 ? 1 : 0);
+          pk.to = RING + Math.floor(Math.random() * 4);
         }
         const a = pts[pk.from];
         const b = pts[pk.to];

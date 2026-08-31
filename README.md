@@ -2,9 +2,9 @@
 
 # BrightKin Studio Director
 
-### Two Agents. One Production Log. Zero Guesswork.
+### Production intelligence, compliance, and release decisions—grounded in one auditable production log.
 
-**A Director agent answers status questions from a ClickHouse-backed synthetic production snapshot; a Compliance sub-agent checks fictional demo episodes and tracks against documented example standards. Answers expose their query-grounding path.**
+**Studio Director answers status questions, checks production standards, and now coordinates Greenlight and Release decisions through BrightKin's Studio Mesh layer. Every answer exposes its ClickHouse grounding path.**
 
 <p>
   <a href="https://brightkin-studio-director.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live-Demo-1D4ED8?style=for-the-badge&logo=vercel&logoColor=white"></a>
@@ -36,10 +36,29 @@
 
 Studio Director lets anyone ask plain-language questions about an examiner-safe fictional animated-series pipeline and receive an answer grounded in a freshly queried ClickHouse snapshot. The bundled rows are synthetic demo data, verified as a fixture set on **2026-08-01 UTC**; they are not BrightKin operational evidence.
 
-Two agents built on Google's Agent Development Kit (ADK) split the work:
+Four agents built on Google's Agent Development Kit (ADK) divide responsibility without fragmenting the experience:
 
 - **Director agent** (`agents/director_agent.py`) handles direct status lookups itself, via a single tool (`tool_query_status`) that queries the `production_events` table.
 - **Compliance agent** (`agents/compliance_agent.py`) is a true ADK sub-agent the Director delegates to for anything touching BrightKin's three documented production standards - cast diversity, original-music-only policy, and camera-pacing variety. It runs its own ClickHouse queries and reports the exact pass/fail result and the specific gap, never a paraphrase.
+- **Greenlight agent** (`agents/greenlight_agent.py`) converts the latest append-only production state into an explicit `GO`, `HOLD`, or `NO_DATA` recommendation and identifies the blocking evidence.
+- **Release agent** (`agents/release_agent.py`) combines production state with the standards relevant to the item type and returns `READY` or `HOLD`, including every failed evidence gate.
+
+### New BrightKin product layer: Studio Mesh
+
+Studio Mesh is an expansion of Studio Director, not a replacement for it. Studio Director remains the user-facing production-intelligence product: live status, standards checks, tenant-scoped “Bring Your Own Show,” an operational dashboard, and visible query evidence. Studio Mesh is the orchestration layer underneath it that lets the Director call the right specialist at the right decision boundary.
+
+This creates an interwoven workflow instead of four chatbots standing side by side:
+
+1. **Director** identifies the intent and owns the final response.
+2. **Compliance** evaluates the documented creative and policy rules.
+3. **Greenlight** decides whether work can advance based on the latest event state.
+4. **Release** retrieves evidence through the official ClickHouse MCP server, combines applicable gates, and decides whether the item can ship.
+
+All specialists share the same tenant-scoped, append-only ClickHouse memory. Their handoff and the SQL evidence are returned to the interface, so a judge can see both the decision and how the network reached it.
+
+### Official ClickHouse MCP runtime path
+
+The Release specialist actively calls the official `ClickHouse/mcp-clickhouse` server through a FastMCP client (`agents/mcp_evidence.py` → `run_query`). The server runs through FastMCP's in-memory MCP transport, which preserves the actual MCP tool boundary while remaining suitable for a serverless Python function. The existing `clickhouse-connect` layer remains for deterministic parameterized writes, rate limiting, and the lower-level status/compliance helpers; it is no longer the only runtime integration.
 
 Answers are grounded through tool calls against that synthetic snapshot. Agent-generated wording can still be imperfect, so the UI exposes routing and query evidence for inspection. If ClickHouse is unreachable, the API returns an availability error instead of inventing database rows.
 

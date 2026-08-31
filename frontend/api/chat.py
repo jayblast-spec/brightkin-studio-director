@@ -97,12 +97,15 @@ def _ask_director(question: str, tenant_id: str) -> dict:
                     answer = part.text
                     final_author = event.author
 
-        agent = "compliance" if "compliance" in final_author else "director"
-        route = (
-            "Delegated by Director → Compliance sub-agent"
-            if delegated
-            else "Handled directly - production status lookup"
-        )
+        if "compliance" in final_author:
+            agent, specialist = "compliance", "Compliance"
+        elif "greenlight" in final_author:
+            agent, specialist = "greenlight", "Greenlight"
+        elif "release" in final_author:
+            agent, specialist = "release", "Release"
+        else:
+            agent, specialist = "director", "Director"
+        route = f"Studio Mesh: Director → {specialist} specialist" if delegated else "Handled directly - production status lookup"
         return {"answer": answer, "agent": agent, "route": route, "query": sql}
 
     # Scope every tool call this agent run makes (director + any delegated

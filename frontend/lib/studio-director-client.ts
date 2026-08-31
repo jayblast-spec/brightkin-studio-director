@@ -1,4 +1,4 @@
-export type Agent = "director" | "compliance";
+export type Agent = "director" | "compliance" | "greenlight" | "release";
 
 export type DirectorReply = {
   /** Which agent produced the final answer. */
@@ -16,6 +16,8 @@ export const EXAMPLE_QUESTIONS = [
   "Does episode_demo_1 meet the diversity standard?",
   "Does track_demo_horizon meet the music originality policy?",
   "Does episode_demo_1 pass the camera pacing standard?",
+  "Should episode_demo_1 be greenlit to advance?",
+  "Is episode_demo_1 ready for release?",
 ];
 
 /** tenantId is optional - omit it (or pass the canonical BrightKin id) to
@@ -33,7 +35,9 @@ export async function askStudioDirector(question: string, tenantId?: string): Pr
     return { agent: "director", text: data.error ?? "Couldn't reach the production log." };
   }
   return {
-    agent: data.agent === "compliance" ? "compliance" : "director",
+    agent: (["director", "compliance", "greenlight", "release"] as Agent[]).includes(data.agent)
+      ? data.agent
+      : "director",
     text: data.answer,
     query: data.query ?? undefined,
     route: data.route ?? undefined,

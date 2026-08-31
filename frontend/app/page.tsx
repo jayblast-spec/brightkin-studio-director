@@ -34,9 +34,9 @@ const STEPS = [
   },
   {
     n: "02",
-    title: "Director decides",
+    title: "Studio Mesh orchestrates",
     icon: Split,
-    body: "The Director agent answers production-status questions directly, and delegates standards questions to the Compliance sub-agent. Routing is part of the answer, not hidden behind it.",
+    body: "The Director coordinates Compliance, Greenlight, and Release specialists. Each owns a decision boundary; routing and evidence stay visible.",
     tag: "agent handoff",
   },
   {
@@ -166,9 +166,9 @@ function Hero() {
 
           <Reveal delay={180}>
             <p className="mt-7 max-w-xl text-[17px] leading-relaxed text-muted-foreground">
-              A Director agent and a Compliance sub-agent - built on Google&apos;s Agent Development
-              Kit and Gemini - that answer questions about a synthetic animated-series production
-              snapshot stored in ClickHouse. Demo data verified 2026-08-01 UTC.
+              BrightKin Studio Director turns production data into auditable decisions. Its new
+              Studio Mesh layer lets the Director coordinate Compliance, Greenlight, and Release
+              specialists over one ClickHouse production memory. Demo data verified 2026-08-01 UTC.
             </p>
           </Reveal>
 
@@ -193,7 +193,7 @@ function Hero() {
           <Reveal delay={340}>
             <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-[var(--hairline)] pt-6">
               {[
-                ["2", "agents"],
+                ["4", "interwoven agents"],
                 ["1", "queried warehouse"],
                 ["1", "synthetic snapshot"],
               ].map(([v, k]) => (
@@ -214,7 +214,7 @@ function Hero() {
         <Reveal delay={160} className="relative">
           <TiltCard intensity={5} className="relative">
             <div className="glow-gold rounded-2xl">
-              <Viewfinder caption="DIRECTOR ⇄ COMPLIANCE ⇄ CLICKHOUSE">
+              <Viewfinder caption="DIRECTOR ⇄ COMPLIANCE ⇄ GREENLIGHT ⇄ RELEASE ⇄ CLICKHOUSE">
                 <AgentNetwork className="block h-[340px] w-full sm:h-[400px]" />
                 <div className="tilt-layer pointer-events-none absolute top-3 left-1/2 -translate-x-1/2 rounded-full border border-[var(--hairline)] bg-background/80 px-2.5 py-1 font-mono text-[10px] tracking-wider text-gold-soft uppercase">
                   ADK · Gemini
@@ -252,6 +252,14 @@ function HowItWorks() {
             <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
               <ShieldCheck className="size-4 text-cyan" aria-hidden />
               Compliance - standards, policies, pass/fail
+            </span>
+            <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+              <Split className="size-4 text-emerald-300" aria-hidden />
+              Greenlight - GO/HOLD decisions and blockers
+            </span>
+            <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+              <Megaphone className="size-4 text-violet-300" aria-hidden />
+              Release - combined evidence gate before shipping
             </span>
           </div>
         </Reveal>

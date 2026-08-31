@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Database, ShieldCheck, Clapperboard, Sparkles, Film, Wand2 } from "lucide-react";
+import { ArrowUp, Database, ShieldCheck, Clapperboard, Sparkles, Film, Wand2, CircleGauge, Rocket } from "lucide-react";
 import { askStudioDirector, EXAMPLE_QUESTIONS, type DirectorReply } from "@/lib/studio-director-client";
 import { checkTenantStatus, getOrCreateTenantId } from "@/lib/tenant-client";
 import { TenantIntakeForm } from "@/components/bk/TenantIntakeForm";
@@ -281,18 +281,23 @@ function ChatBody({
   );
 }
 
-function AgentBadge({ agent }: { agent: "director" | "compliance" }) {
-  const isDirector = agent === "director";
-  const Icon = isDirector ? Clapperboard : ShieldCheck;
+function AgentBadge({ agent }: { agent: DirectorReply["agent"] }) {
+  const meta = {
+    director: { label: "Director", Icon: Clapperboard, classes: "border-gold/35 bg-gold/10 text-gold-soft" },
+    compliance: { label: "Compliance", Icon: ShieldCheck, classes: "border-cyan/35 bg-cyan/10 text-cyan" },
+    greenlight: { label: "Greenlight", Icon: CircleGauge, classes: "border-emerald-400/35 bg-emerald-400/10 text-emerald-300" },
+    release: { label: "Release", Icon: Rocket, classes: "border-violet-400/35 bg-violet-400/10 text-violet-300" },
+  }[agent];
+  const Icon = meta.Icon;
   return (
     <span
       className={cn(
         "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-widest uppercase",
-        isDirector ? "border-gold/35 bg-gold/10 text-gold-soft" : "border-cyan/35 bg-cyan/10 text-cyan"
+        meta.classes
       )}
     >
       <Icon className="size-3" aria-hidden />
-      {isDirector ? "Director" : "Compliance"}
+      {meta.label}
     </span>
   );
 }

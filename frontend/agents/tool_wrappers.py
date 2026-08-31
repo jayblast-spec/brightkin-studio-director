@@ -8,6 +8,7 @@ from agents.tools import (
     debug_attributes_sql,
 )
 from agents.compliance import check_diversity, check_music_policy, check_pacing
+from agents.mcp_evidence import run_mcp_query
 
 
 def tool_query_status(item_id: str) -> dict:
@@ -53,3 +54,69 @@ def tool_check_music_policy(track_id: str) -> dict:
 def tool_check_pacing(episode_id: str) -> dict:
     """Check whether an episode's scene sequence meets BrightKin's camera-variety standard."""
     return _run_compliance_check(episode_id, check_pacing)
+
+
+def tool_assess_greenlight(item_id: str) -> dict:
+    """Assess whether an item can advance from its current production stage."""
+    client = get_client()
+    tenant_id = get_tenant()
+    events = query_production_status(client, item_id, tenant_id=tenant_id)
+    if not events:
+        return {"exists": False, "item_id": item_id, "decision": "NO_DATA", "sql": debug_events_sql(item_id, tenant_id)}
+    latest = events[-1]
+    blocking_words = ("blocked", "flagged", "failed", "hold", "incomplete")
+    blockers = [latest] if any(
+        word in f"{latest.get('status', '')} {latest.get('notes', '')}".lower()
+        for word in blocking_words
+    ) else []
+    return {
+        "exists": True,
+        "item_id": item_id,
+        "decision": "HOLD" if blockers else "GO",
+        "current_stage": latest.get("stage"),
+        "current_status": latest.get("status"),
+        "blockers": blockers,
+        "sql": debug_events_sql(item_id, tenant_id),
+    }
+
+
+def tool_assess_release(item_id: str) -> dict:
+    """Combine production state and applicable standards into one release gate."""
+    client = get_client()
+    tenant_id = get_tenant()
+    events = query_production_status(client, item_id, tenant_id=tenant_id)
+    if not events:
+        return {"exists": False, "item_id": item_id, "decision": "NO_DATA", "sql": debug_events_sql(item_id, tenant_id)}
+    attributes = get_attributes(client, item_id, tenant_id=tenant_id)
+    item_type = str(events[-1].get("item_type", "")).lower()
+    checks = []
+    if "track" in item_type:
+        checks.append({"standard": "music_originality", **check_music_policy(attributes)})
+    else:
+        checks.extend([
+            {"standard": "cast_diversity", **check_diversity(attributes)},
+            {"standard": "camera_pacing", **check_pacing(attributes)},
+        ])
+    failed = [check for check in checks if not check.get("passed")]
+    return {
+        "exists": True,
+        "item_id": item_id,
+        "decision": "HOLD" if failed else "READY",
+        "checks": checks,
+        "gaps": failed,
+        "sql": f"{debug_events_sql(item_id, tenant_id)}; {debug_attributes_sql(item_id, tenant_id)}",
+    }
+
+
+async def tool_mcp_release_evidence(item_id: str) -> dict:
+    """Fetch release evidence via the official ClickHouse MCP server."""
+    tenant_id = get_tenant()
+    events_sql = debug_events_sql(item_id, tenant_id)
+    attributes_sql = debug_attributes_sql(item_id, tenant_id)
+    return {
+        "item_id": item_id,
+        "production_events": await run_mcp_query(events_sql),
+        "standards_evidence": await run_mcp_query(attributes_sql),
+        "sql": f"{events_sql}; {attributes_sql}",
+        "transport": "official ClickHouse/mcp-clickhouse (in-memory MCP)",
+    }
