@@ -25,10 +25,10 @@ export default async function Image() {
           BRIGHTKIN STUDIO
         </div>
         <div style={{ display: "flex", fontSize: 64, fontWeight: 700, lineHeight: 1.1, marginBottom: 28 }}>
-          Studio Director
+          Studio Mesh
         </div>
         <div style={{ display: "flex", fontSize: 28, color: "#8a8a92", maxWidth: 900, lineHeight: 1.4 }}>
-          Director + Compliance agents, built on Google&apos;s ADK and Gemini, grounded in a live ClickHouse production log.
+          Director, Compliance, Greenlight &amp; Release agents, built on Google&apos;s ADK and Gemini, grounded in a live ClickHouse production log.
         </div>
         <div style={{ display: "flex", marginTop: 48, fontSize: 22, color: "#ffb84d" }}>
           Agentic Cinema Hackathon &middot; ClickHouse Track

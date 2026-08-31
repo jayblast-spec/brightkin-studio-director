@@ -3,7 +3,7 @@ import "./globals.css";
 
 const title = "BrightKin Studio Director";
 const description =
-  "A Director + Compliance agent network, built on Google's Agent Development Kit and Gemini, that answers production-workflow questions grounded in a dated synthetic ClickHouse snapshot.";
+  "Studio Mesh: a Director, Compliance, Greenlight, and Release agent network, built on Google's Agent Development Kit and Gemini, that answers production-workflow and release-readiness questions grounded in a dated synthetic ClickHouse snapshot.";
 const url = "https://brightkin-studio-director.vercel.app";
 
 export const metadata: Metadata = {
