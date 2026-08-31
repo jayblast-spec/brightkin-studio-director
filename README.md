@@ -28,6 +28,11 @@
   <img alt="Animated headline" src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=18&duration=2600&pause=650&color=1D4ED8&center=true&vCenter=true&width=760&lines=Director+%2B+Compliance+agent%2C+one+production+log;ClickHouse+as+live+agent+memory%2C+not+a+static+export;Real+studio+standards%2C+machine-checked%2C+not+assumed;Ask+it+why+an+episode+is+blocked+and+it+tells+you">
 </p>
 
+<p>
+  <img alt="Live Director-to-Compliance delegation, with the real ClickHouse query and result shown inline" src="https://raw.githubusercontent.com/jayblast-spec/brightkin-studio-director/master/docs/hero.png" width="820">
+</p>
+<p><em>Real screenshot from the live deployment — not a mockup. The Director delegates a diversity-standard question to the Compliance sub-agent, which answers from a live ClickHouse query against the synthetic BrightKin snapshot.</em></p>
+
 </div>
 
 ---
