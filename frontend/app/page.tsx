@@ -20,6 +20,7 @@ import { AgentNetwork } from "@/components/bk/AgentNetwork";
 import { DemoChat } from "@/components/bk/DemoChat";
 import { FilmStrip } from "@/components/bk/FilmStrip";
 import { Grain } from "@/components/bk/Grain";
+import { OnboardingTour, TourReplayButton } from "@/components/bk/OnboardingTour";
 import { Reveal } from "@/components/bk/Reveal";
 import { TiltCard } from "@/components/bk/TiltCard";
 import { Viewfinder } from "@/components/bk/Viewfinder";
@@ -62,6 +63,7 @@ export default function Landing() {
         <ClosingCTA />
       </main>
       <Footer />
+      <OnboardingTour />
     </div>
   );
 }
@@ -111,8 +113,10 @@ function Header() {
           </span>
         </a>
         <nav aria-label="Primary" className="flex items-center gap-1.5">
+          <TourReplayButton className="hidden sm:inline-flex" />
           <Link
             href="/dashboard"
+            data-tour="dashboard-link"
             className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--hairline)] bg-surface/50 px-3 py-2 text-sm text-foreground transition-colors hover:border-gold/40"
           >
             <LayoutDashboard className="size-3.5 text-gold" aria-hidden />
@@ -213,7 +217,7 @@ function Hero() {
 
         <Reveal delay={160} className="relative">
           <TiltCard intensity={5} className="relative">
-            <div className="glow-gold rounded-2xl">
+            <div className="glow-gold rounded-2xl" data-tour="hero">
               <Viewfinder caption="DIRECTOR ⇄ COMPLIANCE ⇄ GREENLIGHT ⇄ RELEASE ⇄ CLICKHOUSE">
                 <AgentNetwork className="block h-[340px] w-full sm:h-[400px]" />
                 <div className="tilt-layer pointer-events-none absolute top-3 left-1/2 -translate-x-1/2 rounded-full border border-[var(--hairline)] bg-background/80 px-2.5 py-1 font-mono text-[10px] tracking-wider text-gold-soft uppercase">
@@ -244,7 +248,10 @@ function HowItWorks() {
         </Reveal>
 
         <Reveal delay={200}>
-          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-2xl border border-[var(--hairline)] bg-surface/40 px-6 py-5">
+          <div
+            data-tour="agents"
+            className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-2xl border border-[var(--hairline)] bg-surface/40 px-6 py-5"
+          >
             <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
               <Clapperboard className="size-4 text-gold" aria-hidden />
               Director - production status, stages, schedule

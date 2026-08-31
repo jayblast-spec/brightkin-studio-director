@@ -77,7 +77,7 @@ export function DemoChat() {
   const showIntakeForm = mode === "own-show" && hasOwnShowData === false && tenantId;
 
   return (
-    <div className="glass-panel grain relative overflow-hidden rounded-3xl">
+    <div className="glass-panel grain relative overflow-hidden rounded-3xl" data-tour="ask">
       <div className="flex flex-wrap items-center gap-3 border-b border-[var(--hairline)] px-5 py-3.5">
         <span className="inline-flex items-center gap-1.5" aria-hidden>
           <span className="relative flex size-2">
@@ -97,6 +97,7 @@ export function DemoChat() {
       <div
         role="tablist"
         aria-label="Data source"
+        data-tour="mode-toggle"
         className="flex flex-wrap gap-2 border-b border-[var(--hairline)] px-5 py-3.5"
       >
         <ModeTab
