@@ -7,3 +7,4 @@ node_modules/
 *.egg-info/
 demo-video-frames/
 demo-video.mp4
+.vercel
